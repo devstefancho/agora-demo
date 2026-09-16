@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+/* 모눈종이 위의 픽셀. 종이색 팔레트는 그대로, 모서리는 각지고, 그림자는 흐리지 않는다. */
+:root {
+  --paper: #f5f2ea;
+  --paper-deep: #ebe6da;
+  --card: #fffdf8;
+  --ink: #1f1c17;
+  --ink-soft: #4a463f;
+  --muted: #7d786d;
+  --line: #e0dbcf;
+  --line-strong: #c9c2b2;
+  --accent: #d8542a;
+  --accent-ink: #b5431f;
+  --good: #2e7a4d;
+  --good-soft: #e3f0e7;
+  --warn: #b3401e;
+  --grid: #e9e4d8;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-warn: var(--warn);
+  --font-sans: var(--font-pixel), -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+  --font-display: var(--font-pixel), -apple-system, "Apple SD Gothic Neo", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  /* 픽셀 그림자: 흐림 0, 잉크색 */
+  --shadow-px: 4px 4px 0 0 var(--ink);
+  --shadow-px-sm: 2px 2px 0 0 var(--ink);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  /* 24px 모눈 */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+.shadow-px {
+  box-shadow: var(--shadow-px);
+}
+.shadow-px-sm {
+  box-shadow: var(--shadow-px-sm);
+}
+
+/* 화면 전환: 두 계단으로 뜬다 */
+.screen-enter {
+  animation: screen-in 180ms steps(2, end);
+}
+@keyframes screen-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .screen-enter { animation: none; }
+}
+
+/* 픽셀 아이콘은 늘려도 흐려지지 않게 */
+.pixel-icon {
+  shape-rendering: crispEdges;
+  image-rendering: pixelated;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px dashed var(--accent);
+  outline-offset: 3px;
+}

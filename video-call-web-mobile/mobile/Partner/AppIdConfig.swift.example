@@ -1,0 +1,5 @@
+// scripts/ios.sh gen 이 web/.env.local 의 NEXT_PUBLIC_AGORA_APP_ID 로 AppIdConfig.swift 를 만든다 (gitignore).
+// 손으로 만들려면 이 파일을 AppIdConfig.swift 로 복사하고 값을 넣는다.
+enum AppIdConfig {
+    static let value = ""
+}
