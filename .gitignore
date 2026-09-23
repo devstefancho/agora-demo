@@ -58,3 +58,9 @@ next-env.d.ts
 
 # 로컬 전용 에이전트 지침
 CLAUDE.local.md
+
+# 스피커 기기 빌드물·SDK (voice-ai-device/device/)
+*/device/sdk/
+*/device/speaker
+*/device/*.o
+*/device/io.agora.rtc_sdk/

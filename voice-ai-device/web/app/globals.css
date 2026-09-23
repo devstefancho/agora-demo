@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* 모눈종이 위의 픽셀. 모서리는 각지고, 그림자는 흐리지 않는다. */
+:root {
+  --paper: #f5f2ea;
+  --paper-deep: #ebe6da;
+  --card: #fffdf8;
+  --ink: #1f1c17;
+  --ink-soft: #4a463f;
+  --muted: #7d786d;
+  --line: #e0dbcf;
+  --line-strong: #c9c2b2;
+  --accent: #d8542a;
+  --good: #2e7a4d;
+  --grid: #e9e4d8;
+}
+
+@theme inline {
+  --color-paper: var(--paper);
+  --color-paper-deep: var(--paper-deep);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-good: var(--good);
+  --font-sans: var(--font-pixel), -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+  --font-display: var(--font-pixel), -apple-system, "Apple SD Gothic Neo", sans-serif;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  /* 24px 모눈 */
+  background-color: var(--paper);
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.shadow-px {
+  box-shadow: 4px 4px 0 0 var(--ink);
+}
