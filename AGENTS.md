@@ -6,6 +6,7 @@
 |---|---|
 | `video-call-web-mobile/` | `web/`(Next.js) · `mobile/`(iOS 파트너 앱) · `scripts/` · `docs/`(`spec.md` 가 SSOT) · `.claude/` · `.mcp.json` |
 | `voice-ai-web/` | Next.js 앱(디렉토리 자체) · `scripts/` · `docs/`(`spec.md` 가 SSOT) · `.claude/` · `.mcp.json` |
+| `voice-ai-device/` | `device/`(리눅스 기기 C 프로그램) · `web/`(Next.js 서버·보조 화면) · `scripts/` · `docs/`(`spec.md` 가 SSOT) · `.claude/` · `.mcp.json` |
 
 - 작업은 `video-call-web-mobile/AGENTS.md` 를 먼저 읽고 한다. 그 파일이 이 파일보다 구체적이고, 충돌하면 그쪽이 이긴다.
 - Agora 공식 skill(`.claude/skills/agora`), Claude Code 명령(`.claude/commands/`), `.mcp.json` 은 `video-call-web-mobile/` 안에 있다. 코딩 에이전트는 그 디렉토리에서 실행한다.
