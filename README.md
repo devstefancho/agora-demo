@@ -7,6 +7,7 @@
 | [`video-call-web-mobile/`](video-call-web-mobile/) | 파트너와 5분 영상통화. 데스크톱 웹 + 폰(브라우저 또는 iOS 앱) | Video SDK (RTC) + Signaling (RTM) |
 | [`voice-ai-web/`](voice-ai-web/) | AI 파트너 Mia 와 5분 영어 음성 대화. 데스크톱·폰 브라우저 | Conversational AI Engine + Video SDK (RTC) + Signaling (RTM) |
 | [`voice-ai-device/`](voice-ai-device/) | 화면 없는 스피커 기기에서 Mia 와 영어 대화. 리눅스 기기(C) + 웹 서버 | IoT SDK + Conversational AI Engine |
+| [`avatar-ai-web/`](avatar-ai-web/) | AI 아바타 Mia 와 5분 대화. 데스크톱 웹 | Conversational AI Engine + 아바타 |
 
 ```bash
 git clone https://github.com/devstefancho/agora-demo

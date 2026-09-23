@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "agora-docs-mcp": {
+      "type": "http",
+      "url": "https://mcp.agora.io"
+    },
+    "agora-cli": {
+      "type": "stdio",
+      "command": "agora",
+      "args": ["mcp", "serve"]
+    }
+  }
+}
