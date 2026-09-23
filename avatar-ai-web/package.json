@@ -9,6 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "agora-agent-client-toolkit": "2.10.0",
+    "agora-agents": "^2.10.0",
+    "agora-rtc-sdk-ng": "^4.24.8",
+    "agora-rtm": "^2.3.0",
+    "agora-token": "^2.0.6",
     "galmuri": "^2.40.3",
     "next": "16.3.4",
     "react": "19.2.8",
