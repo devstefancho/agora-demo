@@ -55,7 +55,7 @@ Claude Code는 `CLAUDE.md`가 이 파일을 가리키고, grok·codex·cursor는
 3. 서버 코드는 `app/api/agora/*` Route Handler 에만 둔다. App Certificate 와 아바타 키는 서버에만 있다.
 4. **Agora 패키지 import 격리.** 서버 SDK(`agora-token`, `agora-agents`)는 `app/api/agora/` 안에서만, 그 밖의 Agora 패키지(클라이언트 SDK)는 `lib/agora/` 안에서만 import 한다. 계약 파일(`lib/talk.ts`)과 화면은 SDK 를 모른다. `check-integration` 이 잡는다.
 5. env 는 `.env.local`. App ID·Certificate 는 이 디렉토리에서 `agora` CLI(`agora project env write --template nextjs`)가 쓴다. 아바타 값(`AVATAR_VENDOR`·`AVATAR_API_KEY`·`AVATAR_ID`)은 사람이 직접 넣는다.
-   시크릿 값을 채팅이나 로그에 출력하지 않는다. 레포에 env 파일을 커밋하지 않는다.
+   시크릿 값을 채팅이나 로그에 출력하지 않는다. 레포에 env 파일을 커밋하지 않는다. `agora project show` 는 App Certificate 원문을 찍으므로 실행하지 않는다(프로젝트 확인은 `agora project doctor`).
 6. "된다"는 실제 브라우저에서 사람이 목소리·얼굴을 확인한 뒤에만 말한다. 통합 보고는 "사람 확인" 목록으로 끝난다.
 7. 검증에 녹화 클립·가짜 마이크(chromium 플래그)를 쓰지 않는다. 실제 마이크로만 한다.
 
