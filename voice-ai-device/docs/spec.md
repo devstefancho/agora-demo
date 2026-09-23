@@ -214,7 +214,7 @@ void link_stop(void);
 3. agent route:
    - `POST` body `{ channel, uid, unitId? }`. 검증은 토큰 route 와 같고, `unitId` 는 없으면 4.
    - quickstart 의 invite-agent 를 옮긴다: `AgoraClient({ area, appId, appCertificate })`, `new Agent({ instructions: buildMiaInstructions(unit), greeting: unit.greeting, failureMessage, maxHistory, turnDetection(quickstart 값), advancedFeatures: { enable_rtm: true }, parameters })` 에 `.withStt(DeepgramSTT nova-3 en)` · `.withLlm(OpenAI gpt-4o-mini, greetingMessage: unit.greeting)` · `.withTts(MiniMaxTTS speech_2_6_turbo, 여성 영어 목소리)`.
-   - 기기용으로 바꾸는 것만: `parameters` 에 `output_audio_codec: "G722"`(Device Kit 샘플 값)과 `data_channel: "rtm"`, `enable_error_message: true`. 세션은 `agent.createSession({ channel, agentUid: "1001", remoteUids: [String(uid)], idleTimeout: 30, enableStringUid: false })`.
+   - 기기용으로 바꾸는 것만: `parameters` 에 `output_audio_codec: "G722"`(Device Kit 샘플 값)과 `data_channel: "rtm"`, `enable_error_message: true`. `output_audio_codec` 은 `agora-agents` 타입에 없어 객체 리터럴로 넣으면 빌드가 막힌다. 모듈 상수로 만들어 `parameters` 타입으로 단언해 넘긴다(SDK 는 parameters 를 그대로 REST 요청에 싣는다). 세션은 `agent.createSession({ channel, agentUid: "1001", remoteUids: [String(uid)], idleTimeout: 30, enableStringUid: false })`.
    - `session.start()` → `{ agentId }`. 실패는 500 과 사유(시크릿 없이).
    - `DELETE ?agentId=`: quickstart 의 stop-conversation 처럼 `client.stopAgent`. 이미 끝난 에이전트(404, "already in the process of shutting down")는 성공으로 본다.
    - 표식과 501 을 지운다.
