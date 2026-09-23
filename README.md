@@ -5,6 +5,7 @@
 | 디렉토리 | 무엇 | Agora |
 |---|---|---|
 | [`video-call-web-mobile/`](video-call-web-mobile/) | 파트너와 5분 영상통화. 데스크톱 웹 + 폰(브라우저 또는 iOS 앱) | Video SDK (RTC) + Signaling (RTM) |
+| [`voice-ai-web/`](voice-ai-web/) | AI 파트너 Mia 와 5분 영어 음성 대화. 데스크톱·폰 브라우저 | Conversational AI Engine + Video SDK (RTC) + Signaling (RTM) |
 
 ```bash
 git clone https://github.com/devstefancho/agora-demo
