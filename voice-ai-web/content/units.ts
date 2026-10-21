@@ -178,6 +178,54 @@ export function buildMiaInstructions(unit: Unit): string {
     .join("\n");
 }
 
+// 교정 튜터 PoC (2026-10-22, 유튜브 2편 기획). 학습자가 단어가 안 떠올라 한국어를 섞어 말하면
+// 그 자리를 영어로 어떻게 말하는지 알려 주고 기억에 남게 이유·예시를 붙인다. 고쳐 주는 타이밍 셋을
+// 사람이 다 써 본 뒤 하나를 고른다. 화면은 `?mode=now|natural|batch` 로 고른다. 기본(없음)은 Mia 그대로.
+export type TutorMode = "now" | "natural" | "batch";
+
+export function isTutorMode(v: unknown): v is TutorMode {
+  return v === "now" || v === "natural" || v === "batch";
+}
+
+const TUTOR_TIMING: Record<TutorMode, string[]> = {
+  now: [
+    `- Correct immediately. The moment the learner mixes in a Korean word or phrase, or uses a clearly unnatural expression, stop and say: "Ah, in that case you can say: ..." Give the English phrase once, then one memorable hook (a short reason, origin, or a tiny example), then let the learner say it once, then continue the conversation.`,
+    `- Keep each correction under three short sentences. One correction per turn at most.`,
+  ],
+  natural: [
+    `- Do not stop the conversation to correct. Reply naturally, and inside your reply use the correct English phrase for what the learner tried to say, so they hear it in context.`,
+    `- Only explain (reason, origin, example) when the learner asks "how do I say that" or asks about a word.`,
+  ],
+  batch: [
+    `- Do not correct during the conversation. Keep the exchange flowing in simple English even when the learner mixes Korean; understand the Korean and respond to the meaning.`,
+    `- When the learner says they are done, or after about five exchanges, pause and give a short recap: for each Korean phrase they used, say the English phrase and one memorable hook. Then ask if they want to try one of them.`,
+  ],
+};
+
+export function buildTutorInstructions(unit: Unit, mode: TutorMode): string {
+  const targets = unit.expressions.map((e, i) => `${i + 1}. "${e.en}" (${e.ko})`).join("\n");
+  return [
+    `You are Mia, a friendly American English tutor in a speaking practice app.`,
+    `The learner is a Korean adult. They understand English well, but when speaking, the right word often does not come to mind, so they mix in Korean mid-sentence. That is expected and welcome: it is the signal you teach from. You understand Korean.`,
+    ``,
+    `Today's topic: ${unit.scenario}`,
+    unit.roleplay ? `Role-play setup: ${unit.roleplay}` : null,
+    ``,
+    `Useful expressions for this topic (bring them up naturally when they fit):`,
+    targets,
+    ``,
+    `Rules:`,
+    `- Speak English. Speak slowly and clearly, simple everyday words, one or two short sentences per turn.`,
+    `- End most turns with exactly one easy question so the learner keeps talking.`,
+    `- A memorable hook is one of: why the phrase is said that way, where the word comes from, or a six-word example sentence. Pick one, keep it short.`,
+    ...TUTOR_TIMING[mode],
+    `- Never comment on pronunciation. Grammar only when it blocks meaning.`,
+    `- Keep it warm, like a friend who happens to be a tutor. If the learner says goodbye, wrap up in one short sentence.`,
+  ]
+    .filter((line) => line !== null)
+    .join("\n");
+}
+
 // 전사에서 오늘의 표현 사용 여부를 찾는다 (사용자 발화 기준).
 export function detectUsedExpressions(unit: Unit, userText: string): Set<number> {
   const norm = (s: string) =>

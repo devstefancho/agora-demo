@@ -1,15 +1,17 @@
 // Conversational AI 에이전트 start·stop. agora-agents 서버 SDK 는 app/api/agora/ 안에서만 쓴다.
 //
-//   POST   /api/agora/agent   body { channel, uid, unitId }  →  { agentId, agentUid }
+//   POST   /api/agora/agent   body { channel, uid, unitId, mode? }  →  { agentId, agentUid }
 //          unit = findUnit(unitId), instructions = buildMiaInstructions(unit), greeting = unit.greeting
-//          파이프라인은 Agora 관리 모델(ASR·LLM·TTS, 벤더 키 없음, 영어). 전사는 RTM 으로 보낸다.
+//          mode(now|natural|batch) 가 오면 교정 튜터 PoC 지시문 buildTutorInstructions(unit, mode).
+//          파이프라인은 Agora 관리 모델(ASR·LLM·TTS, 벤더 키 없음). 음성 인식 언어는 env AGORA_STT_LANGUAGE
+//          (기본 "en". 한국어가 섞인 말을 받아 적는 PoC 는 "multi"). 전사는 RTM 으로 보낸다.
 //   DELETE /api/agora/agent?agentId=<id>  →  { ok: true }. 이미 멈춘 에이전트도 성공으로 본다.
 //
 // 원본: 공식 quickstart app/api/invite-agent/route.ts (start), app/api/stop-conversation/route.ts (stop).
 // 파이프라인·턴 감지·RTM 설정은 quickstart 값 그대로이고, 지시문과 첫 인사만 이 앱 것이다.
 
 import { AgoraClient, Agent, Area, DeepgramSTT, ExpiresIn, MiniMaxTTS, OpenAI } from "agora-agents";
-import { buildMiaInstructions, findUnit } from "@/content/units";
+import { buildMiaInstructions, buildTutorInstructions, findUnit, isTutorMode } from "@/content/units";
 
 // Mia 의 RTC uid. 클라이언트 uid 범위(1 ~ 1,000,000) 밖이라 겹치지 않는다.
 // 클라이언트는 이 값을 따로 갖지 않고 POST 응답의 agentUid 로 Mia 를 알아본다.
@@ -28,7 +30,7 @@ function agoraClient() {
 const ENV_MISSING = { error: "agora project env write --template nextjs 를 실행하세요" };
 
 export async function POST(request: Request) {
-  let body: { channel?: unknown; uid?: unknown; unitId?: unknown };
+  let body: { channel?: unknown; uid?: unknown; unitId?: unknown; mode?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -47,11 +49,14 @@ export async function POST(request: Request) {
   if (!client) return Response.json(ENV_MISSING, { status: 500 });
 
   const unit = findUnit(Number(body.unitId));
+  const mode = isTutorMode(body.mode) ? body.mode : undefined;
+  const instructions = mode ? buildTutorInstructions(unit, mode) : buildMiaInstructions(unit);
+  const sttLanguage = process.env.AGORA_STT_LANGUAGE || "en";
 
   try {
     const agent = new Agent({
       client,
-      instructions: buildMiaInstructions(unit),
+      instructions,
       greeting: unit.greeting,
       failureMessage: FAILURE_MESSAGE,
       maxHistory: 50,
@@ -84,7 +89,7 @@ export async function POST(request: Request) {
       },
     })
       // Agora 관리 모델: 벤더 키 없이 Agora 가 대신 부른다
-      .withStt(new DeepgramSTT({ model: "nova-3", language: "en" }))
+      .withStt(new DeepgramSTT({ model: "nova-3", language: sttLanguage }))
       .withLlm(
         new OpenAI({
           model: "gpt-4o-mini",
