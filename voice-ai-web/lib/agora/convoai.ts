@@ -58,7 +58,7 @@ export function createConvoAiVoice(): VoiceSession {
   }
 
   return {
-    async start({ unit, onStatus, onTranscript }) {
+    async start({ unit, mode, onStatus, onTranscript }) {
       const myGen = ++gen;
       const run: Run = {
         onStatus,
@@ -172,7 +172,7 @@ export function createConvoAiVoice(): VoiceSession {
         const agentRes = await fetch("/api/agora/agent", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ channel: run.channel, uid, unitId: unit.id }),
+          body: JSON.stringify({ channel: run.channel, uid, unitId: unit.id, mode }),
         });
         const agentData = (await agentRes.json().catch(() => ({}))) as {
           agentId?: string;

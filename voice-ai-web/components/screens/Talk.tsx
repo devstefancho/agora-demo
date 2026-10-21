@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { SESSION_SECONDS, detectUsedExpressions, type Unit } from "@/content/units";
+import { SESSION_SECONDS, detectUsedExpressions, isTutorMode, type TutorMode, type Unit } from "@/content/units";
 import { createVoiceSession, type TranscriptTurn, type VoiceStatus } from "@/lib/voice";
 import { formatClock } from "@/lib/storage";
 import { speak, stopSpeaking } from "@/lib/speech";
@@ -15,6 +15,13 @@ export type TalkResult = {
   connected: boolean;
   reason?: string;
 };
+
+// 교정 튜터 PoC: `?mode=now|natural|batch`. 없으면 undefined (Mia 기본).
+function tutorModeFromUrl(): TutorMode | undefined {
+  if (typeof window === "undefined") return undefined;
+  const v = new URLSearchParams(window.location.search).get("mode");
+  return isTutorMode(v) ? v : undefined;
+}
 
 export default function Talk({ unit, onEnd }: { unit: Unit; onEnd: (r: TalkResult) => void }) {
   const [status, setStatus] = useState<VoiceStatus>("idle");
@@ -34,6 +41,7 @@ export default function Talk({ unit, onEnd }: { unit: Unit; onEnd: (r: TalkResul
     const s = session.current;
     s.start({
       unit,
+      mode: tutorModeFromUrl(),
       onStatus: (next, d) => {
         if (cancelled) return;
         setStatus(next);

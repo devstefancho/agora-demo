@@ -10,7 +10,7 @@
 //   stop():   1) 서버에 에이전트 stop 요청  2) 전사 구독·RTM·채널 정리  3) onStatus("ended")  4) 최종 전사 반환
 //   상태 순서: connecting → live → (agent-left | ended). 실패는 error 와 사유.
 
-import type { Unit } from "@/content/units";
+import type { TutorMode, Unit } from "@/content/units";
 import { createConvoAiVoice } from "@/lib/agora/convoai";
 
 export type VoiceStatus =
@@ -29,6 +29,8 @@ export type TranscriptTurn = {
 
 export type VoiceStartOptions = {
   unit: Unit;
+  /** 교정 튜터 PoC 타이밍. 없으면 Mia 기본 지시문. */
+  mode?: TutorMode;
   onStatus: (status: VoiceStatus, detail?: string) => void;
   onTranscript?: (turns: TranscriptTurn[]) => void;
 };
